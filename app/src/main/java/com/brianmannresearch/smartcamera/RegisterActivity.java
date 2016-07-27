@@ -83,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     }
                 } else {
                     password = false;
-                    messageText.setText("Password must be between 8 and fifteen characters, contain a lowercase and uppercase letter, and include a number");
+                    messageText.setText("Password must be between 8 and 15 characters, contain a lowercase and uppercase letter, and include a number");
                 }
             }
 

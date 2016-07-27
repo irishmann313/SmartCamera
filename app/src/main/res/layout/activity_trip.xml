@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical"
+    tools:context="com.brianmannresearch.smartcamera.TripActivity">
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:text="@string/logout_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:text="@string/delete_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/logoutButton"/>
+
+    <Button
+        android:id="@+id/tripButton"
+        android:text="@string/trip_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/deleteButton"/>
+
+    <Button
+        android:id="@+id/continueButton"
+        android:text="@string/continue_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tripButton"/>
+
+    <Button
+        android:id="@+id/startButton"
+        android:text="@string/start_trip_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/continueButton"/>
+
+</RelativeLayout>

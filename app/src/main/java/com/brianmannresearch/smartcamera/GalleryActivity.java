@@ -29,6 +29,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
     TextView exifData;
     ImageView defaultImage;
     Button returnButton, viewButton, deleteButton;
+    String username;
 
     ArrayList<String> imagesPath;
     File[] files;
@@ -43,6 +44,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
         Bundle extras = getIntent().getExtras();
         if (extras != null){
             tripid = extras.getInt("tripid");
+            username = extras.getString("username");
         }
 
         defaultImage = (ImageView) findViewById(R.id.selectedImage);
@@ -66,7 +68,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Trip_" + tripid);
+        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), username + "_Trip_" + tripid);
         if (!imagesFolder.exists() && !imagesFolder.isDirectory()) {
             showExistsAlert();
         }else if (imagesFolder.exists() && imagesFolder.isDirectory() && imagesFolder.listFiles().length == 0){

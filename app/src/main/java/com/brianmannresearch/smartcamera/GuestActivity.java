@@ -44,7 +44,7 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
     ImageView selectedImage;
     Button bCamera, endButton, viewButton, reviewButton;
     TextView exifData;
-    String filename, mode;
+    String filename, mode, username = "guest";
     String [] filepath;
     File imagesFolder;
     int tripid, trip_id;
@@ -66,7 +66,7 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
             tripid = extras.getInt("tripid");
         }
 
-        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Trip_" + tripid);
+        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), username + "_Trip_" + tripid);
         if ("new".matches(mode)) {
             imagesFolder.mkdirs();
         }
@@ -110,6 +110,7 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
             case R.id.reviewTrip:
                 Intent gIntent = new Intent(GuestActivity.this, GalleryActivity.class);
                 gIntent.putExtra("tripid", tripid);
+                gIntent.putExtra("username", username);
                 startActivity(gIntent);
                 break;
         }
@@ -391,6 +392,7 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
                         trip_id = Integer.parseInt(text.getText().toString());
                         Intent galleryIntent = new Intent(GuestActivity.this, GalleryActivity.class);
                         galleryIntent.putExtra("tripid", trip_id);
+                        galleryIntent.putExtra("username", username);
                         startActivity(galleryIntent);
                     }
                 })

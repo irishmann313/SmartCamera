@@ -20,10 +20,8 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
     Button startButton, continueButton, tripButton, logoutButton, deleteButton;
     File imagesFolder;
 
-
-    String mode;
+    String mode, username;
     int userid, tripid;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +34,7 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
             assert mode != null;
             if (mode.matches("login")){
                 userid = extras.getInt("userid");
+                username = extras.getString("username");
             }
         }
 
@@ -116,6 +115,7 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
                         tripid = Integer.parseInt(text.getText().toString());
                         Intent galleryIntent = new Intent(TripActivity.this, GalleryActivity.class);
                         galleryIntent.putExtra("tripid", tripid);
+                        galleryIntent.putExtra("username", username);
                         startActivity(galleryIntent);
                     }
                 })
@@ -142,7 +142,7 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
                         Dialog f = (Dialog) dialogInterface;
                         EditText text = (EditText) f.findViewById(R.id.tripID);
                         tripid = Integer.parseInt(text.getText().toString());
-                        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Trip_" + tripid);
+                        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), username + "_Trip_" + tripid);
                     if (imagesFolder.exists() && imagesFolder.isDirectory() && (imagesFolder.listFiles().length != 0)) {
                         showExistsNewAlert();
                     }else {
@@ -150,12 +150,14 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
                             Intent cameraIntent = new Intent(TripActivity.this, CameraActivity.class);
                             cameraIntent.putExtra("userid", userid);
                             cameraIntent.putExtra("tripid", tripid);
+                            cameraIntent.putExtra("username", username);
                             cameraIntent.putExtra("mode", "new");
                             startActivity(cameraIntent);
                         } else {
                             Intent cameraIntent = new Intent(TripActivity.this, GuestActivity.class);
                             cameraIntent.putExtra("tripid", tripid);
                             cameraIntent.putExtra("mode", mode);
+                            cameraIntent.putExtra("username", username);
                             cameraIntent.putExtra("mode", "new");
                             startActivity(cameraIntent);
                         }
@@ -185,7 +187,7 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
                         Dialog f = (Dialog) dialogInterface;
                         EditText text = (EditText) f.findViewById(R.id.tripID);
                         tripid = Integer.parseInt(text.getText().toString());
-                        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Trip_" + tripid);
+                        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), username + "_Trip_" + tripid);
                         if (!imagesFolder.exists() && !imagesFolder.isDirectory()) {
                             showExistsContinueAlert();
                         }else {
@@ -314,7 +316,7 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
                         Dialog f = (Dialog) dialogInterface;
                         EditText text = (EditText) f.findViewById(R.id.tripID);
                         tripid = Integer.parseInt(text.getText().toString());
-                        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Trip_" + tripid);
+                        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), username + "_Trip_" + tripid);
                         showConfirmDeleteAlert();
                     }
                 })

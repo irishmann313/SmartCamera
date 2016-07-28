@@ -51,7 +51,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     Button bCamera, endButton, bUpload, reviewButton, viewButton;
     TextView exifData;
     ProgressDialog dialog = null;
-    String filename, upLoadServerUrl = null, mode;
+    String filename, upLoadServerUrl = null, mode, username;
     Bitmap chosenImage;
     String[] filepath;
     File[] files;
@@ -75,9 +75,10 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             mode = extras.getString("mode");
             tripid = extras.getInt("tripid");
             userid = extras.getInt("userid");
+            username = extras.getString("username");
         }
 
-        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Trip_" + tripid);
+        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), username + "_Trip_" + tripid);
         if ("new".matches(mode)) {
             imagesFolder.mkdirs();
         }
@@ -149,6 +150,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.reviewTrip:
                 Intent gIntent = new Intent(CameraActivity.this, GalleryActivity.class);
                 gIntent.putExtra("tripid", tripid);
+                gIntent.putExtra("username", username);
                 startActivity(gIntent);
                 break;
         }
@@ -550,6 +552,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         trip_id = Integer.parseInt(text.getText().toString());
                         Intent galleryIntent = new Intent(CameraActivity.this, GalleryActivity.class);
                         galleryIntent.putExtra("tripid", trip_id);
+                        galleryIntent.putExtra("username", username);
                         startActivity(galleryIntent);
                     }
                 })

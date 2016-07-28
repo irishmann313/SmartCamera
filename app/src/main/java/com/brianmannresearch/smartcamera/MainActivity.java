@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.LoginButton:
-                String user = username.getText().toString();
+                final String user = username.getText().toString();
                 String pass = password.getText().toString();
 
                 String hexUser;
@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Intent loginIntent = new Intent(MainActivity.this, TripActivity.class);
                                 loginIntent.putExtra("mode", "login");
                                 loginIntent.putExtra("userid", userID);
+                                loginIntent.putExtra("username", user);
                                 MainActivity.this.startActivity(loginIntent);
                             }else{
                                 statusText.setText("Login failed! Incorrect username or password");
@@ -152,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.GuestButton:
                 Intent guestIntent = new Intent(this, TripActivity.class);
                 guestIntent.putExtra("mode", "guest");
+                guestIntent.putExtra("username", "guest");
                 startActivity(guestIntent);
                 break;
             case R.id.ExitButton:

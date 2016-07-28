@@ -153,24 +153,33 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
     private void setBitmap(String direction){
         if ("left".matches(direction)) {
-            if ((currentimage+1) >= imagesPath.size()) {
-                currentBitmap = BitmapFactory.decodeFile(imagesPath.get(imagesPath.size()-1));
+            if ((currentimage) < imagesPath.size()-1) {
+                currentBitmap = BitmapFactory.decodeFile(imagesPath.get(++currentimage));
             }else{
-                currentBitmap = BitmapFactory.decodeFile(imagesPath.get(currentimage++));
+                currentBitmap = BitmapFactory.decodeFile(imagesPath.get(currentimage));
             }
 
             ExifInterface exif = null;
             try {
-                File pictureFile = new File(imagesPath.get(0));
+                File pictureFile = new File(imagesPath.get(currentimage));
                 exif = new ExifInterface(pictureFile.getAbsolutePath());
+                filepath = pictureFile.getAbsolutePath().split("/");
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             int orientation = ExifInterface.ORIENTATION_NORMAL;
 
-            if (exif != null)
+            if (exif != null) {
                 orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                builder = new StringBuilder();
+                builder.append("Filename: ").append(filepath[filepath.length - 1]).append("\n");
+                builder.append("Date & Time: ").append(exif.getAttribute(ExifInterface.TAG_DATETIME)).append("\n");
+                builder.append("Trip ID: ").append(tripid).append("\n");
+                builder.append("GPS Latitude: ").append(exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)).append(" ").append(exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF)).append("\n");
+                builder.append("GPS Longitude: ").append(exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)).append(" ").append(exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF));
+                exifData.setText(builder.toString());
+            }
 
             switch (orientation) {
                 case ExifInterface.ORIENTATION_ROTATE_90:
@@ -185,16 +194,18 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
             }
             defaultImage.setImageBitmap(currentBitmap);
         }else if ("right".matches(direction)){
-            if (currentimage <= 0) {
-                currentBitmap = BitmapFactory.decodeFile(imagesPath.get(currentimage));
+            if (currentimage > 0) {
+                currentBitmap = BitmapFactory.decodeFile(imagesPath.get(--currentimage));
+
             }else{
-                currentBitmap = BitmapFactory.decodeFile(imagesPath.get(currentimage--));
+                currentBitmap = BitmapFactory.decodeFile(imagesPath.get(currentimage));
             }
 
             ExifInterface exif = null;
             try {
-                File pictureFile = new File(imagesPath.get(0));
+                File pictureFile = new File(imagesPath.get(currentimage));
                 exif = new ExifInterface(pictureFile.getAbsolutePath());
+                filepath = pictureFile.getAbsolutePath().split("/");
             } catch (IOException e) {
                 e.printStackTrace();
             }

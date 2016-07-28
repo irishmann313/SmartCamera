@@ -75,7 +75,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (goodPassword()) {
+                if (registerPassword.length() >= 8) {
                     password = true;
                     messageText.setText("");
                     if (username && match){
@@ -83,7 +83,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     }
                 } else {
                     password = false;
-                    messageText.setText("Password must be between 8 and 15 characters, contain a lowercase and uppercase letter, and include a number");
+                    messageText.setText("Password must be between 8 and 15 characters");
                 }
             }
 
@@ -166,20 +166,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 showCancelAlert();
                 break;
         }
-    }
-
-    private boolean goodPassword() {
-        String password = registerPassword.getText().toString();
-        if(password.length() < 8 || password.length() > 15){
-            return false;
-        } else if (!password.matches(".*[A-Z].*")){
-            return false;
-        } else if (!password.matches(".*[a-z].*")){
-            return false;
-        } else if (!password.matches(".*\\d.*")){
-            return false;
-        }
-        return true;
     }
 
     private void showCancelAlert() {

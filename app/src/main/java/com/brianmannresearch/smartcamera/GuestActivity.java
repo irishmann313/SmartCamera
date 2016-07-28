@@ -42,7 +42,7 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
     private static final int ESTIMATE_LOCATION = 2;
 
     ImageView selectedImage;
-    Button bCamera, endButton, viewButton;
+    Button bCamera, endButton, viewButton, reviewButton;
     TextView exifData;
     String filename, mode;
     String [] filepath;
@@ -77,11 +77,13 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
         endButton = (Button) findViewById(R.id.endButton);
         exifData = (TextView) findViewById(R.id.ExifData);
         viewButton = (Button) findViewById(R.id.viewButton);
+        reviewButton = (Button) findViewById(R.id.reviewTrip);
 
         bCamera.setOnClickListener(this);
         endButton.setOnClickListener(this);
         selectedImage.setOnClickListener(this);
         viewButton.setOnClickListener(this);
+        reviewButton.setOnClickListener(this);
     }
 
     @Override
@@ -104,6 +106,11 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.endButton:
                 showFinishAlert();
+                break;
+            case R.id.reviewTrip:
+                Intent gIntent = new Intent(GuestActivity.this, GalleryActivity.class);
+                gIntent.putExtra("tripid", tripid);
+                startActivity(gIntent);
                 break;
         }
     }

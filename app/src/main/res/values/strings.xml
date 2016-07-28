@@ -29,4 +29,6 @@
     <string name="exit_button">Exit</string>
     <string name="return_button">Return</string>
     <string name="delete_button">Delete Trip</string>
+    <string name="delete_photo">Delete Photo</string>
+    <string name="review_trip">Review Current Trip</string>
 </resources>

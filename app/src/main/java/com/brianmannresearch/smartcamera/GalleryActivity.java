@@ -23,12 +23,12 @@ import java.util.ArrayList;
 
 public class GalleryActivity extends AppCompatActivity implements View.OnClickListener {
 
-    File imagesFolder;
+    File imagesFolder, pictureFile;
     int tripid, currentimage;
     Bitmap currentBitmap = null;
     TextView exifData;
     ImageView defaultImage;
-    Button returnButton, viewButton;
+    Button returnButton, viewButton, deleteButton;
 
     ArrayList<String> imagesPath;
     File[] files;
@@ -51,9 +51,11 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
         returnButton = (Button) findViewById(R.id.returnButton);
         viewButton = (Button) findViewById(R.id.viewButton);
+        deleteButton = (Button) findViewById(R.id.deleteButton);
 
         returnButton.setOnClickListener(this);
         viewButton.setOnClickListener(this);
+        deleteButton.setOnClickListener(this);
 
         defaultImage.setOnTouchListener(new OnSwipeTouchListener(GalleryActivity.this){
             public void onSwipeRight(){
@@ -81,7 +83,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
             ExifInterface exif = null;
             try {
-                File pictureFile = new File(imagesPath.get(0));
+                pictureFile = new File(imagesPath.get(0));
                 exif = new ExifInterface(pictureFile.getAbsolutePath());
                 filepath = pictureFile.getAbsolutePath().split("/");
             }catch (IOException e){
@@ -161,7 +163,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
             ExifInterface exif = null;
             try {
-                File pictureFile = new File(imagesPath.get(currentimage));
+                pictureFile = new File(imagesPath.get(currentimage));
                 exif = new ExifInterface(pictureFile.getAbsolutePath());
                 filepath = pictureFile.getAbsolutePath().split("/");
             } catch (IOException e) {
@@ -203,7 +205,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
             ExifInterface exif = null;
             try {
-                File pictureFile = new File(imagesPath.get(currentimage));
+                pictureFile = new File(imagesPath.get(currentimage));
                 exif = new ExifInterface(pictureFile.getAbsolutePath());
                 filepath = pictureFile.getAbsolutePath().split("/");
             } catch (IOException e) {
@@ -247,6 +249,9 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.viewButton:
                 showTripAlert();
                 break;
+            case R.id.deleteButton:
+                showDeleteAlert();
+                break;
         }
 
     }
@@ -281,7 +286,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
 
                             ExifInterface exif = null;
                             try {
-                                File pictureFile = new File(imagesPath.get(0));
+                                pictureFile = new File(imagesPath.get(0));
                                 exif = new ExifInterface(pictureFile.getAbsolutePath());
                                 filepath = pictureFile.getAbsolutePath().split("/");
                             } catch (IOException e) {
@@ -325,5 +330,91 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
                 });
         final AlertDialog alert = alertDialog.create();
         alert.show();
+    }
+
+    private void showDeleteAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+
+        alertDialog.setTitle("Delete");
+        alertDialog.setMessage("Are you sure you want to delete this photo?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        deleteRecursive(pictureFile);
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // do nothing
+                    }
+                });
+        final AlertDialog alert = alertDialog.create();
+        alert.show();
+    }
+
+    private void deleteRecursive(File FileorDirectory){
+        if (FileorDirectory.isDirectory()){
+            for (File child : FileorDirectory.listFiles()){
+                deleteRecursive(child);
+            }
+        }
+        FileorDirectory.delete();
+        imagesPath = new ArrayList<>();
+        files = imagesFolder.listFiles();
+        if (files.length > 0) {
+            for (int j = 0; j < files.length; j++) {
+                imagesPath.add(files[j].toString());
+            }
+
+            currentimage--;
+            currentBitmap = BitmapFactory.decodeFile(imagesPath.get(currentimage));
+
+            ExifInterface exif = null;
+            try {
+                pictureFile = new File(imagesPath.get(currentimage));
+                exif = new ExifInterface(pictureFile.getAbsolutePath());
+                filepath = pictureFile.getAbsolutePath().split("/");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            int orientation = ExifInterface.ORIENTATION_NORMAL;
+
+            if (exif != null) {
+                orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+                builder = new StringBuilder();
+                builder.append("Filename: ").append(filepath[filepath.length - 1]).append("\n");
+                builder.append("Date & Time: ").append(exif.getAttribute(ExifInterface.TAG_DATETIME)).append("\n");
+                builder.append("Trip ID: ").append(tripid).append("\n");
+                builder.append("GPS Latitude: ").append(exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)).append(" ").append(exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF)).append("\n");
+                builder.append("GPS Longitude: ").append(exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)).append(" ").append(exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF));
+                exifData.setText(builder.toString());
+            }
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    currentBitmap = rotateBitmap(currentBitmap, 90);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    currentBitmap = rotateBitmap(currentBitmap, 180);
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    currentBitmap = rotateBitmap(currentBitmap, 270);
+                    break;
+            }
+
+            defaultImage.setImageBitmap(currentBitmap);
+        }else{
+            defaultImage.setImageBitmap(null);
+            builder = new StringBuilder();
+            builder.append("Filename: N/A\n");
+            builder.append("Date & Time: N/A\n");
+            builder.append("Trip ID: N/A\n");
+            builder.append("GPS Latitude: N/A\n");
+            builder.append("GPS Longitude: N/A");
+            exifData.setText(builder.toString());
+        }
     }
 }

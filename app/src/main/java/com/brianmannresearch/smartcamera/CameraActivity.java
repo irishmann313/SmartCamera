@@ -48,7 +48,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private static final int ESTIMATE_LOCATION = 2;
 
     ImageView selectedImage;
-    Button bCamera, endButton, bUpload, viewButton;
+    Button bCamera, endButton, bUpload, reviewButton, viewButton;
     TextView exifData;
     ProgressDialog dialog = null;
     String filename, upLoadServerUrl = null, mode;
@@ -89,6 +89,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         endButton = (Button) findViewById(R.id.endButton);
         exifData = (TextView) findViewById(R.id.ExifData);
         viewButton = (Button) findViewById(R.id.viewButton);
+        reviewButton = (Button) findViewById(R.id.reviewTrip);
 
 
         upLoadServerUrl = "http://10.25.172.60:80/my-site/upload.php";
@@ -98,6 +99,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         bUpload.setOnClickListener(this);
         viewButton.setOnClickListener(this);
         selectedImage.setOnClickListener(this);
+        reviewButton.setOnClickListener(this);
     }
 
     @Override
@@ -143,6 +145,11 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.endButton:
                 showFinishAlert();
+                break;
+            case R.id.reviewTrip:
+                Intent gIntent = new Intent(CameraActivity.this, GalleryActivity.class);
+                gIntent.putExtra("tripid", tripid);
+                startActivity(gIntent);
                 break;
         }
     }

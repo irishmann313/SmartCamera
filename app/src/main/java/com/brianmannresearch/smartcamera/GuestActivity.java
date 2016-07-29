@@ -1,6 +1,5 @@
 package com.brianmannresearch.smartcamera;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,10 +21,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,12 +39,12 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
     private static final int ESTIMATE_LOCATION = 2;
 
     ImageView selectedImage;
-    Button bCamera, endButton, viewButton, reviewButton;
+    Button bCamera, endButton, reviewButton;
     TextView exifData;
     String filename, mode, username = "guest";
     String [] filepath;
     File imagesFolder;
-    int tripid, trip_id;
+    int tripid;
 
     GPSTracker gps;
     StringBuilder builder;
@@ -76,13 +73,11 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
         bCamera = (Button) findViewById(R.id.bCamera);
         endButton = (Button) findViewById(R.id.endButton);
         exifData = (TextView) findViewById(R.id.ExifData);
-        viewButton = (Button) findViewById(R.id.viewButton);
         reviewButton = (Button) findViewById(R.id.reviewTrip);
 
         bCamera.setOnClickListener(this);
         endButton.setOnClickListener(this);
         selectedImage.setOnClickListener(this);
-        viewButton.setOnClickListener(this);
         reviewButton.setOnClickListener(this);
     }
 
@@ -100,9 +95,6 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     showSettingsAlert();
                 }
-                break;
-            case R.id.viewButton:
-                showTripAlert();
                 break;
             case R.id.endButton:
                 showFinishAlert();
@@ -375,34 +367,5 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
                         Toast.makeText(GuestActivity.this, "Finished", Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    private void showTripAlert(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-
-        alertDialog.setMessage("What trip number do you want to view?")
-                .setCancelable(false)
-                .setView(inflater.inflate(R.layout.trip_dialog, null))
-                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Dialog f = (Dialog) dialogInterface;
-                        EditText text = (EditText) f.findViewById(R.id.tripID);
-                        trip_id = Integer.parseInt(text.getText().toString());
-                        Intent galleryIntent = new Intent(GuestActivity.this, GalleryActivity.class);
-                        galleryIntent.putExtra("tripid", trip_id);
-                        galleryIntent.putExtra("username", username);
-                        startActivity(galleryIntent);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // do nothing
-                    }
-                });
-        final AlertDialog alert = alertDialog.create();
-        alert.show();
     }
 }

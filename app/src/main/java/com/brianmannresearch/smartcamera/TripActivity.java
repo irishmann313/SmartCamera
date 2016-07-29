@@ -52,7 +52,7 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < folders.length; i++){
             foldername = folders[i].toString().split("/");
             if (foldername[foldername.length-1].matches(username+"_Trip_\\d")) {
-                trips.append("\n").append(foldername[foldername.length - 1]);
+                trips.append("\n").append("- ").append(foldername[foldername.length - 1]);
             }
         }
         tripText.setText(trips);

@@ -1,6 +1,5 @@
 package com.brianmannresearch.smartcamera;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,10 +23,8 @@ import android.os.Bundle;
 
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +45,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     private static final int ESTIMATE_LOCATION = 2;
 
     ImageView selectedImage;
-    Button bCamera, endButton, bUpload, reviewButton, viewButton;
+    Button bCamera, endButton, bUpload, reviewButton;
     TextView exifData;
     ProgressDialog dialog = null;
     String filename, upLoadServerUrl = null, mode, username;
@@ -56,7 +53,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
     String[] filepath;
     File[] files;
     File imagesFolder;
-    int serverResponseCode = 0, userid, tripid, trip_id;
+    int serverResponseCode = 0, userid, tripid;
 
     GPSTracker gps;
     StringBuilder builder;
@@ -89,7 +86,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         bUpload = (Button) findViewById(R.id.bUpload);
         endButton = (Button) findViewById(R.id.endButton);
         exifData = (TextView) findViewById(R.id.ExifData);
-        viewButton = (Button) findViewById(R.id.viewButton);
         reviewButton = (Button) findViewById(R.id.reviewTrip);
 
 
@@ -98,7 +94,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         bCamera.setOnClickListener(this);
         endButton.setOnClickListener(this);
         bUpload.setOnClickListener(this);
-        viewButton.setOnClickListener(this);
         selectedImage.setOnClickListener(this);
         reviewButton.setOnClickListener(this);
     }
@@ -140,9 +135,6 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                         }
                     }
                 }
-                break;
-            case R.id.viewButton:
-                showTripAlert();
                 break;
             case R.id.endButton:
                 showFinishAlert();
@@ -535,34 +527,5 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
                     public void onScanCompleted(String path, Uri uri){
                     }
                 });
-    }
-
-    private void showTripAlert(){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-
-        alertDialog.setMessage("What trip number do you want to view?")
-                .setCancelable(false)
-                .setView(inflater.inflate(R.layout.trip_dialog, null))
-                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Dialog f = (Dialog) dialogInterface;
-                        EditText text = (EditText) f.findViewById(R.id.tripID);
-                        trip_id = Integer.parseInt(text.getText().toString());
-                        Intent galleryIntent = new Intent(CameraActivity.this, GalleryActivity.class);
-                        galleryIntent.putExtra("tripid", trip_id);
-                        galleryIntent.putExtra("username", username);
-                        startActivity(galleryIntent);
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        // do nothing
-                    }
-                });
-        final AlertDialog alert = alertDialog.create();
-        alert.show();
     }
 }

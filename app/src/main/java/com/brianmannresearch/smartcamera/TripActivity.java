@@ -18,6 +18,8 @@ import java.io.File;
 
 public class TripActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int CAMERA_INTENT = 1;
+
     Button startButton, continueButton, tripButton, logoutButton, deleteButton;
     TextView tripText;
     File imagesFolder, directory;
@@ -170,14 +172,14 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
                             cameraIntent.putExtra("tripid", tripid);
                             cameraIntent.putExtra("username", username);
                             cameraIntent.putExtra("mode", "new");
-                            startActivity(cameraIntent);
+                            startActivityForResult(cameraIntent, CAMERA_INTENT);
                         } else {
                             Intent cameraIntent = new Intent(TripActivity.this, GuestActivity.class);
                             cameraIntent.putExtra("tripid", tripid);
                             cameraIntent.putExtra("mode", mode);
                             cameraIntent.putExtra("username", username);
                             cameraIntent.putExtra("mode", "new");
-                            startActivity(cameraIntent);
+                            startActivityForResult(cameraIntent, CAMERA_INTENT);
                         }
                     }
                 }
@@ -214,13 +216,13 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
                                 cameraIntent.putExtra("userid", userid);
                                 cameraIntent.putExtra("tripid", tripid);
                                 cameraIntent.putExtra("mode", "continue");
-                                startActivity(cameraIntent);
+                                startActivityForResult(cameraIntent, CAMERA_INTENT);
                             } else {
                                 Intent cameraIntent = new Intent(TripActivity.this, GuestActivity.class);
                                 cameraIntent.putExtra("tripid", tripid);
                                 cameraIntent.putExtra("mode", mode);
                                 cameraIntent.putExtra("mode", "continue");
-                                startActivity(cameraIntent);
+                                startActivityForResult(cameraIntent, CAMERA_INTENT);
                             }
                         }
                     }
@@ -247,12 +249,12 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
                             cameraIntent.putExtra("userid", userid);
                             cameraIntent.putExtra("tripid", tripid);
                             cameraIntent.putExtra("mode", "continue");
-                            startActivity(cameraIntent);
+                            startActivityForResult(cameraIntent, CAMERA_INTENT);
                         }else{
                             Intent cameraIntent = new Intent(TripActivity.this, GuestActivity.class);
                             cameraIntent.putExtra("tripid", tripid);
                             cameraIntent.putExtra("mode", "continue");
-                            startActivity(cameraIntent);
+                            startActivityForResult(cameraIntent, CAMERA_INTENT);
                         }
                     }
                 })
@@ -278,12 +280,12 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
                             cameraIntent.putExtra("userid", userid);
                             cameraIntent.putExtra("tripid", tripid);
                             cameraIntent.putExtra("mode", "new");
-                            startActivity(cameraIntent);
+                            startActivityForResult(cameraIntent, CAMERA_INTENT);
                         }else{
                             Intent cameraIntent = new Intent(TripActivity.this, GuestActivity.class);
                             cameraIntent.putExtra("tripid", tripid);
                             cameraIntent.putExtra("mode", "new");
-                            startActivity(cameraIntent);
+                            startActivityForResult(cameraIntent, CAMERA_INTENT);
                         }
                     }
                 })
@@ -369,6 +371,24 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
                 });
         final AlertDialog alert = alertDialog.create();
         alert.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CAMERA_INTENT && resultCode == RESULT_OK) {
+            directory = new File(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)));
+            folders = directory.listFiles();
+            trips = new StringBuilder();
+            trips.append("Existing Trips:");
+            for (int i = 0; i < folders.length; i++){
+                foldername = folders[i].toString().split("/");
+                if (foldername[foldername.length-1].matches(username+"_Trip_\\d")) {
+                    trips.append("\n").append("- ").append(foldername[foldername.length - 1]);
+                }
+            }
+            tripText.setText(trips);
+        }
     }
 }
 

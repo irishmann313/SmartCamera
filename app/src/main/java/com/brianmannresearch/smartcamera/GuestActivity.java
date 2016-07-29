@@ -323,6 +323,10 @@ public class GuestActivity extends AppCompatActivity implements View.OnClickList
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent data = new Intent();
+                        String text = "Finished";
+                        data.setData(Uri.parse(text));
+                        setResult(RESULT_OK, data);
                         finish();
                     }
                 })

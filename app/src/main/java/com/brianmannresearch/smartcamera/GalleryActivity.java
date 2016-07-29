@@ -271,7 +271,7 @@ public class GalleryActivity extends AppCompatActivity implements View.OnClickLi
                         Dialog f = (Dialog) dialogInterface;
                         EditText text = (EditText) f.findViewById(R.id.tripID);
                         tripid = Integer.parseInt(text.getText().toString());
-                        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Trip_" + tripid);
+                        imagesFolder = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), username + "_Trip_" + tripid);
                         if (!imagesFolder.exists() && !imagesFolder.isDirectory()) {
                             showExistsAlert();
                         }else if (imagesFolder.exists() && imagesFolder.isDirectory() && imagesFolder.listFiles().length == 0){

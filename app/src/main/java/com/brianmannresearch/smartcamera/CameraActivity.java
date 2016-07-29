@@ -89,7 +89,7 @@ public class CameraActivity extends AppCompatActivity implements View.OnClickLis
         reviewButton = (Button) findViewById(R.id.reviewTrip);
 
 
-        upLoadServerUrl = "http://10.25.172.60:80/my-site/upload.php";
+        upLoadServerUrl = "http://10.26.39.80:80/my-site/upload.php";
 
         bCamera.setOnClickListener(this);
         endButton.setOnClickListener(this);

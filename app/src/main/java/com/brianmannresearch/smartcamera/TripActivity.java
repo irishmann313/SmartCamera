@@ -310,6 +310,17 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
                             showExistsAlert();
                         } else {
                             deleteRecursive(imagesFolder);
+                            directory = new File(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)));
+                            folders = directory.listFiles();
+                            trips = new StringBuilder();
+                            trips.append("Existing Trips:");
+                            for (int j = 0; j < folders.length; j++){
+                                foldername = folders[j].toString().split("/");
+                                if (foldername[foldername.length-1].matches(username+"_Trip_\\d")) {
+                                    trips.append("\n").append("- ").append(foldername[foldername.length - 1]);
+                                }
+                            }
+                            tripText.setText(trips);
                         }
                     }
                 })

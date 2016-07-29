@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.File;
 
@@ -18,10 +19,14 @@ import java.io.File;
 public class TripActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button startButton, continueButton, tripButton, logoutButton, deleteButton;
-    File imagesFolder;
+    TextView tripText;
+    File imagesFolder, directory;
+    File[] folders;
+    String[] foldername;
 
     String mode, username;
     int userid, tripid;
+    StringBuilder trips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +36,26 @@ public class TripActivity extends AppCompatActivity implements View.OnClickListe
         Bundle extras = getIntent().getExtras();
         if (extras != null){
             mode = extras.getString("mode");
+            username = extras.getString("username");
             assert mode != null;
             if (mode.matches("login")){
                 userid = extras.getInt("userid");
-                username = extras.getString("username");
             }
         }
 
+        tripText = (TextView) findViewById(R.id.tripText);
+
+        directory = new File(String.valueOf(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)));
+        folders = directory.listFiles();
+        trips = new StringBuilder();
+        trips.append("Existing Trips:");
+        for (int i = 0; i < folders.length; i++){
+            foldername = folders[i].toString().split("/");
+            if (foldername[foldername.length-1].matches(username+"_Trip_\\d")) {
+                trips.append("\n").append(foldername[foldername.length - 1]);
+            }
+        }
+        tripText.setText(trips);
 
         startButton = (Button) findViewById(R.id.startButton);
         continueButton = (Button) findViewById(R.id.continueButton);

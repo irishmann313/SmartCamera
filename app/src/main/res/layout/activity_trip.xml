@@ -7,6 +7,12 @@
     android:orientation="vertical"
     tools:context="com.brianmannresearch.smartcamera.TripActivity">
 
+    <TextView
+        android:id="@+id/tripText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"/>
+
     <Button
         android:id="@+id/logoutButton"
         android:text="@string/logout_button"

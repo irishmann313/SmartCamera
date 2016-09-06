@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class RegisterRequest extends StringRequest {
 
-    private static final String registerServerUrl = "http://10.26.39.80:80/my-site/register.php";
+    private static final String registerServerUrl = "http://10.13.147.183:80/my-site/register.php";
     private Map<String, String> params;
 
     public RegisterRequest(String username, String password, Response.Listener<String> listener){

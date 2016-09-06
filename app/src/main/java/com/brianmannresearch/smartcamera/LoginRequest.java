@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class LoginRequest extends StringRequest {
 
-    private static final String loginServerUrl = "http://10.26.39.80:80/my-site/login.php";
+    private static final String loginServerUrl = "http://10.13.147.183:80/my-site/login.php";
     private Map<String, String> params;
 
     public LoginRequest(String username, String password, Response.Listener<String> listener){
